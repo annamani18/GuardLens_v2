@@ -1,6 +1,6 @@
 # 🛡️ GuardLens v2
 
-> AI-powered Chrome Extension that detects dark patterns in e-commerce websites and provides a real-time trust score for safer online shopping.
+>  Chrome Extension that detects dark patterns in e-commerce websites and provides a real-time trust score for safer online shopping.
 
 ![Status](https://img.shields.io/badge/Status-Active-success)
 ![Version](https://img.shields.io/badge/Version-v2-blue)
@@ -29,6 +29,303 @@ Detects manipulative tactics such as:
 
 - Fake Urgency  
   *(Only 1 left!, Limited time deal)
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
+
+      
+⚠️ Fake Urgency
+
+      
+Creates artificial time pressure to rush your decision
+
+      
+"Only 1 left"
+
+    
 
       
 ⚠️ Fake Urgency
