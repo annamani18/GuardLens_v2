@@ -1,0 +1,9 @@
+*.md
+*_FIX*
+*_SUMMARY*
+*_AUDIT*
+*_VERIFICATION*
+*_REF*
+
+Thumbs.db
+.DS_Store

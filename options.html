@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardLens Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .settings-container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      padding: 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0;
+    }
+
+    .text-gray-600 {
+      color: #666;
+    }
+
+    .mb-8 {
+      margin-bottom: 32px;
+    }
+
+    .mb-4 {
+      margin-bottom: 16px;
+    }
+
+    .mt-8 {
+      margin-top: 32px;
+    }
+
+    .mt-2 {
+      margin-top: 8px;
+    }
+
+    .pt-8 {
+      padding-top: 32px;
+    }
+
+    .text-sm {
+      font-size: 14px;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .setting-item {
+      padding: 20px;
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 60px;
+      height: 30px;
+      background: #ccc;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle-switch.active {
+      background: #FFBF00;
+    }
+
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      background: white;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s;
+    }
+
+    .toggle-switch.active::after {
+      transform: translateX(30px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #FFBF00 0%, #FF9500 100%);
+      color: white;
+      border: none;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+      font-size: 14px;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 191, 0, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f5f5f5;
+      color: #333;
+      border: 1px solid #ddd;
+      padding: 12px 32px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 14px;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .flex {
+      display: flex;
+    }
+
+    .gap-4 {
+      gap: 16px;
+    }
+
+    .border-t {
+      border-top: 1px solid #e0e0e0;
+    }
+
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="settings-container">
+    <h1>🛡️ GuardLens Settings</h1>
+    <p class="text-gray-600 mb-8">Configure your dark pattern detection preferences</p>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" id="totalScans">0</div>
+        <div class="stat-label">Total Scans</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="totalPatterns">0</div>
+        <div class="stat-label">Patterns Detected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" id="sitesScanned">0</div>
+        <div class="stat-label">Sites Scanned</div>
+      </div>
+    </div>
+
+    <!-- Settings -->
+    <div class="mt-8">
+      <h2>Detection Settings</h2>
+
+      <div class="setting-item">
+        <div>
+          <h3>Enable AI Detection</h3>
+          <p class="text-sm text-gray-600">Use Chrome Gemini Nano for advanced pattern recognition</p>
+        </div>
+        <div class="toggle-switch active" id="toggleAI"></div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h3>Show Tooltips</h3>
+          <p class="text-sm text-gray-600">Display explanations when hovering over flagged elements</p>
+        </div>
+        <div class="toggle-switch active" id="toggleTooltips"></div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h3>Auto-Scan New Content</h3>
+          <p class="text-sm text-gray-600">Automatically scan dynamically loaded content</p>
+        </div>
+        <div class="toggle-switch active" id="toggleAutoScan"></div>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h3>Show Badge Count</h3>
+          <p class="text-sm text-gray-600">Display pattern count on extension icon</p>
+        </div>
+        <div class="toggle-switch active" id="toggleBadge"></div>
+      </div>
+    </div>
+
+    <!-- Data Management -->
+    <div class="mt-8">
+      <h2>Data Management</h2>
+
+      <div class="setting-item">
+        <div>
+          <h3>Clear Cache</h3>
+          <p class="text-sm text-gray-600">Remove all cached scan results (24-hour cache)</p>
+        </div>
+        <button class="btn-secondary" id="clearCacheBtn">Clear Cache</button>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h3>Reset Statistics</h3>
+          <p class="text-sm text-gray-600">Clear all scan history and statistics</p>
+        </div>
+        <button class="btn-secondary" id="resetStatsBtn">Reset Stats</button>
+      </div>
+
+      <div class="setting-item">
+        <div>
+          <h3>Export Data</h3>
+          <p class="text-sm text-gray-600">Download your scan history as JSON</p>
+        </div>
+        <button class="btn-secondary" id="exportBtn">Export</button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="mt-8 flex gap-4">
+      <button class="btn-primary" id="saveBtn">Save Settings</button>
+      <button class="btn-secondary" id="resetBtn">Reset to Defaults</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 pt-8 border-t text-center text-sm text-gray-600">
+      <p>GuardLens v1.0.0 | Powered by Chrome Gemini Nano AI</p>
+      <p class="mt-2">
+        <a href="https://github.com/yourusername/guardlens">GitHub</a> •
+        <a href="#">Report Issue</a> •
+        <a href="#">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardLens</title>
+  <link rel="stylesheet" href="popup-styles.css">
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">
+      <div class="logo-icon">🛡️</div>
+      <div class="brand-text">
+        <div class="brand-name">GuardLens</div>
+        <div class="brand-tagline">Shop with confidence</div>
+      </div>
+    </div>
+    <div class="version-badge">v2.0</div>
+  </div>
+
+  <!-- Loading State -->
+  <div id="loading" class="loading-container">
+    <div class="loading-spinner">
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+      <div class="spinner-ring"></div>
+    </div>
+    <div class="loading-text">Analyzing page...</div>
+    <div class="loading-subtext">Detecting dark patterns</div>
+  </div>
+
+  <!-- Main Content -->
+  <div id="main" class="main-content" style="display:none">
+
+    <!-- Trust Score Card -->
+    <div class="trust-score-card">
+      <div class="score-header">
+        <div class="site-info">
+          <div class="site-icon">🌐</div>
+          <div class="site-details">
+            <div class="site-name" id="siteName">—</div>
+            <div class="site-status" id="scoreDesc">Calculating...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Circular Trust Score -->
+      <div class="score-circle-container">
+        <svg class="score-circle" viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+              <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <circle class="score-bg" cx="60" cy="60" r="52" />
+          <circle class="score-progress" id="scoreCircle" cx="60" cy="60" r="52" />
+        </svg>
+        <div class="score-value-container">
+          <div class="score-value" id="scoreVal">100</div>
+          <div class="score-label">Trust Score</div>
+        </div>
+      </div>
+
+      <!-- Score Explanation -->
+      <div class="score-explanation" id="scoreExplanation">
+        <div class="explanation-icon">✨</div>
+        <div class="explanation-text">This site appears trustworthy</div>
+      </div>
+    </div>
+
+    <!-- Pattern Detection Cards -->
+    <div class="patterns-section">
+      <div class="section-title">
+        <span class="title-icon">🔍</span>
+        <span>Detected Patterns</span>
+      </div>
+
+      <div class="pattern-grid">
+        <div class="pattern-card" data-pattern="urgency">
+          <div class="pattern-icon urgency-icon">⏰</div>
+          <div class="pattern-info">
+            <div class="pattern-count" id="urgencyCount">0</div>
+            <div class="pattern-label">Fake Urgency</div>
+          </div>
+          <div class="pattern-indicator" id="urgencyIndicator"></div>
+        </div>
+
+        <div class="pattern-card" data-pattern="scarcity">
+          <div class="pattern-icon scarcity-icon">📦</div>
+          <div class="pattern-info">
+            <div class="pattern-count" id="scarcityCount">0</div>
+            <div class="pattern-label">False Scarcity</div>
+          </div>
+          <div class="pattern-indicator" id="scarcityIndicator"></div>
+        </div>
+
+        <div class="pattern-card" data-pattern="sneak">
+          <div class="pattern-icon sneak-icon">🛒</div>
+          <div class="pattern-info">
+            <div class="pattern-count" id="sneakCount">0</div>
+            <div class="pattern-label">Sneak-in</div>
+          </div>
+          <div class="pattern-indicator" id="sneakIndicator"></div>
+        </div>
+
+        <div class="pattern-card" data-pattern="social">
+          <div class="pattern-icon social-icon">👥</div>
+          <div class="pattern-info">
+            <div class="pattern-count" id="socialCount">0</div>
+            <div class="pattern-label">Social Proof</div>
+          </div>
+          <div class="pattern-indicator" id="socialIndicator"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Why This Score Section -->
+    <div class="why-score-section" id="whyScoreSection">
+      <div class="section-title">
+        <span class="title-icon">💡</span>
+        <span>Why this score?</span>
+      </div>
+      <div class="why-score-content" id="whyScoreContent">
+        <div class="why-item">
+          <div class="why-icon">✓</div>
+          <div class="why-text">Analyzing patterns...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Smart Suggestions Section -->
+    <div class="suggestions-section" id="smartSuggestions" style="display:none">
+      <div class="section-title">
+        <span class="title-icon">🎯</span>
+        <span>Smart Suggestions</span>
+      </div>
+      <div class="suggestions-list"></div>
+    </div>
+
+    <!-- Market Comparison -->
+    <div class="comparison-section">
+      <div class="section-title">
+        <span class="title-icon">📊</span>
+        <span>Market Comparison</span>
+        <div class="comparison-badge" id="comparisonBadge">0 sites</div>
+      </div>
+      <div class="comparison-content" id="comparisonList">
+        <div class="comparison-empty">
+          <div class="empty-icon">🏪</div>
+          <div class="empty-text">Open multiple e-commerce tabs to compare trust scores</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions-section">
+      <button class="btn btn-primary" id="rescanBtn">
+        <span class="btn-icon">🔄</span>
+        <span class="btn-text">Re-scan Page</span>
+        <div class="btn-shine"></div>
+      </button>
+
+      <button class="btn btn-ghost" id="reportBtn">
+        <span class="btn-icon">📝</span>
+        <span class="btn-text">Report Issue</span>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Report Modal -->
+  <div id="reportModal" class="modal" style="display:none">
+    <div class="modal-overlay"></div>
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <div class="modal-title-section">
+          <h2 class="modal-title">Report Issue / Feedback</h2>
+          <p class="modal-subtitle">Help improve GuardLens by reporting bugs, wrong scores, or suspicious website behavior.</p>
+        </div>
+        <button class="modal-close" id="modalCloseBtn" aria-label="Close modal">✕</button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form id="reportForm">
+          <!-- Issue Type -->
+          <div class="form-group">
+            <label for="issueType" class="form-label">Issue Type <span class="required">*</span></label>
+            <select id="issueType" class="form-select" required>
+              <option value="">Select an issue type...</option>
+              <option value="extension_bug">Extension Bug</option>
+              <option value="wrong_score">Wrong Trust Score</option>
+              <option value="suspicious_behavior">Suspicious Website Behavior</option>
+              <option value="missed_pattern">Dark Pattern Missed</option>
+              <option value="feature_request">Feature Request</option>
+              <option value="ui_problem">UI Problem</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="form-error" id="issueTypeError"></span>
+          </div>
+
+          <!-- Current Website -->
+          <div class="form-group">
+            <label for="reportDomain" class="form-label">Current Website</label>
+            <input type="text" id="reportDomain" class="form-input" placeholder="example.com" readonly>
+          </div>
+
+          <!-- Current Score -->
+          <div class="form-group">
+            <label for="reportScore" class="form-label">Current Score</label>
+            <input type="text" id="reportScore" class="form-input" placeholder="Not analyzed yet" readonly>
+          </div>
+
+          <!-- Description -->
+          <div class="form-group">
+            <label for="description" class="form-label">Description <span class="required">*</span></label>
+            <textarea id="description" class="form-textarea" placeholder="Describe the issue clearly..." rows="4" required></textarea>
+            <span class="form-error" id="descriptionError"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="reportEmail" class="form-label">Email <span class="optional">(optional)</span></label>
+            <input type="email" id="reportEmail" class="form-input" placeholder="your@email.com">
+            <span class="form-error" id="emailError"></span>
+          </div>
+
+          <!-- Consent Checkbox -->
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="consentCheckbox" required>
+              <span class="checkbox-text">I agree to share issue details for debugging and improvement.</span>
+            </label>
+            <span class="form-error" id="consentError"></span>
+          </div>
+
+          <!-- Legal Notice -->
+          <div class="legal-notice">
+            <p class="legal-text">⚠️ Do not include passwords, payment details, or sensitive personal information.</p>
+            <p class="legal-text">Reports are used only for debugging and improving GuardLens.</p>
+          </div>
+
+          <!-- Form Buttons -->
+          <div class="modal-buttons">
+            <button type="button" class="btn btn-ghost" id="modalCancelBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="submitReportBtn">
+              <span class="btn-text">Submit Report</span>
+              <span class="btn-spinner" style="display:none">⏳</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Success State -->
+        <div id="successState" style="display:none" class="success-state">
+          <div class="success-icon">✓</div>
+          <h3 class="success-title">Thank you!</h3>
+          <p class="success-message">Your report was submitted successfully.</p>
+          <p class="success-ticket">Ticket ID: <span id="ticketId">GL-0000</span></p>
+          <button type="button" class="btn btn-primary" id="successCloseBtn">Close</button>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" style="display:none" class="error-state">
+          <div class="error-icon">✕</div>
+          <h3 class="error-title">Submission Failed</h3>
+          <p class="error-message" id="errorMessage">An error occurred. Please try again.</p>
+          <button type="button" class="btn btn-secondary" id="errorRetryBtn">Try Again</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-text">Protected by GuardLens AI</div>
+  </div>
+
+  <script src="reportManager.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

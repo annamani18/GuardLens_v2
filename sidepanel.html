@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GuardLens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── DESIGN SYSTEM (Linear-inspired, 2026) ────────────────────────── */
+    :root {
+      --bg:         #000000;
+      --surface:    #0d0d0d;
+      --surface2:   #141414;
+      --surface3:   #1a1a1a;
+      --border:     rgba(255,255,255,0.08);
+      --border2:    rgba(255,255,255,0.13);
+      --text:       #e8e8e8;
+      --text-muted: #666;
+      --text-dim:   #444;
+      --accent:     #FFBF00;
+      --accent-dim: rgba(255,191,0,0.15);
+      --green:      #22c55e;
+      --green-dim:  rgba(34,197,94,0.15);
+      --amber:      #f59e0b;
+      --amber-dim:  rgba(245,158,11,0.15);
+      --red:        #ef4444;
+      --red-dim:    rgba(239,68,68,0.15);
+      --radius:     8px;
+      --radius-lg:  12px;
+      --font:       'Inter', -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      width: 380px;
+      min-height: 100vh;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ─────────────────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    /* ── HEADER ────────────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .header-left { display: flex; align-items: center; gap: 8px; }
+    .logo { font-size: 18px; }
+    .brand { font-weight: 700; font-size: 15px; letter-spacing: -0.3px; }
+    .version { font-size: 10px; color: var(--text-muted); background: var(--surface3);
+               padding: 2px 6px; border-radius: 4px; border: 1px solid var(--border); }
+
+    /* ── LOADING ───────────────────────────────────────────────────────── */
+    #loading {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 12px; padding: 60px 24px;
+    }
+    .spinner {
+      width: 28px; height: 28px;
+      border: 2px solid var(--border2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── MAIN CONTENT ──────────────────────────────────────────────────── */
+    #dashboard { display: none; padding: 16px 18px; }
+
+    /* ── TRUST SCORE ───────────────────────────────────────────────────── */
+    .score-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .score-ring {
+      position: relative; flex-shrink: 0;
+      width: 80px; height: 80px;
+    }
+    .score-ring svg { width: 80px; height: 80px; transform: rotate(-90deg); }
+    .score-ring circle { fill: none; stroke-width: 6; stroke-linecap: round; }
+    .ring-bg  { stroke: var(--surface3); }
+    .ring-fg  { stroke: var(--green); stroke-dasharray: 220; stroke-dashoffset: 220;
+                transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1),
+                            stroke 0.4s ease; }
+    .ring-num {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .ring-value {
+      font-size: 22px; font-weight: 700; letter-spacing: -1px;
+      transition: color 0.4s;
+    }
+    .ring-label { font-size: 9px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .score-info { flex: 1; min-width: 0; }
+    .score-site { font-weight: 600; font-size: 14px; margin-bottom: 4px;
+                  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .score-desc { color: var(--text-muted); font-size: 12px; line-height: 1.4; }
+
+    /* ── SECTION HEADER ────────────────────────────────────────────────── */
+    .section-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase; color: var(--text-dim);
+      margin-bottom: 8px; margin-top: 4px;
+    }
+
+    /* ── STATS GRID ────────────────────────────────────────────────────── */
+    .stats-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 8px; margin-bottom: 12px;
+    }
+    .stat-chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .stat-chip-icon { font-size: 14px; }
+    .stat-chip-info {}
+    .stat-chip-value { font-size: 18px; font-weight: 700; }
+    .stat-chip-label { font-size: 10px; color: var(--text-muted); }
+
+    /* ── PATTERN TAGS ──────────────────────────────────────────────────── */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .tag {
+      padding: 3px 9px; border-radius: 100px; font-size: 11px; font-weight: 500;
+      border: 1px solid;
+    }
+    .tag-red    { background: var(--red-dim);   color: #ff6b6b; border-color: rgba(239,68,68,0.25); }
+    .tag-amber  { background: var(--amber-dim); color: #fbbf24; border-color: rgba(245,158,11,0.25); }
+    .tag-green  { background: var(--green-dim); color: #4ade80; border-color: rgba(34,197,94,0.25); }
+    .tag-blue   { background: rgba(59,130,246,0.1); color: #60a5fa; border-color: rgba(59,130,246,0.2); }
+    .tag-purple { background: rgba(168,85,247,0.1); color: #c084fc; border-color: rgba(168,85,247,0.2); }
+
+    /* ── EMPTY STATE ───────────────────────────────────────────────────── */
+    .empty-state {
+      background: var(--surface);
+      border: 1px dashed var(--border2);
+      border-radius: var(--radius-lg);
+      padding: 32px 20px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .empty-icon { font-size: 36px; margin-bottom: 10px; }
+    .empty-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .empty-sub { color: var(--text-muted); font-size: 12px; line-height: 1.5; }
+
+    /* ── NON-ECOM STATE ────────────────────────────────────────────────── */
+    #non-ecom-state { display: none; padding: 40px 24px; text-align: center; }
+    .non-ecom-icon { font-size: 40px; margin-bottom: 12px; }
+    .non-ecom-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .non-ecom-sub { color: var(--text-muted); font-size: 12px; line-height: 1.6; }
+
+    /* ── COMPARISON MODULE ─────────────────────────────────────────────── */
+    #comparison-module { margin-bottom: 12px; }
+    .comparison-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .comparison-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+      font-weight: 600; font-size: 12px;
+      display: flex; align-items: center; gap: 6px; color: var(--text-muted);
+    }
+    .comparison-sites { display: flex; }
+    .site-col {
+      flex: 1; padding: 14px;
+      border-right: 1px solid var(--border);
+    }
+    .site-col:last-child { border-right: none; }
+    .site-col.winner { background: var(--green-dim); }
+    .site-name { font-weight: 600; font-size: 13px; margin-bottom: 8px;
+                 white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .site-score {
+      font-size: 28px; font-weight: 700;
+      letter-spacing: -1px; margin-bottom: 4px;
+    }
+    .site-score.high   { color: var(--green); }
+    .site-score.medium { color: var(--amber); }
+    .site-score.low    { color: var(--red); }
+    .site-meta { font-size: 10px; color: var(--text-muted); }
+    .smart-choice {
+      padding: 10px 14px;
+      background: var(--green-dim);
+      border-top: 1px solid rgba(34,197,94,0.2);
+      font-size: 11px; font-weight: 500;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .badge-winner {
+      background: var(--green); color: #000;
+      font-size: 9px; font-weight: 700;
+      padding: 1px 6px; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    /* ── ACTIONS ───────────────────────────────────────────────────────── */
+    .actions { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+    .btn {
+      padding: 9px 14px; border-radius: var(--radius);
+      font-family: var(--font); font-size: 12px; font-weight: 500;
+      cursor: pointer; border: 1px solid;
+      transition: all 0.15s ease;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-primary {
+      background: var(--accent); color: #000;
+      border-color: var(--accent);
+    }
+    .btn-primary:hover { background: #ffd03a; }
+    .btn-ghost {
+      background: transparent; color: var(--text-muted);
+      border-color: var(--border);
+    }
+    .btn-ghost:hover { background: var(--surface2); color: var(--text); border-color: var(--border2); }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* ── FOOTER ────────────────────────────────────────────────────────── */
+    .footer {
+      text-align: center; padding: 10px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim); font-size: 10px;
+    }
+
+    /* ── DIVIDER ───────────────────────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 12px 0; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <span class="logo">🛡️</span>
+      <span class="brand">GuardLens</span>
+    </div>
+    <span class="version">v2.0</span>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loading">
+    <div class="spinner"></div>
+    <span style="color:var(--text-muted);font-size:12px">Analysing page…</span>
+  </div>
+
+  <!-- NON-ECOM -->
+  <div id="non-ecom-state">
+    <div class="non-ecom-icon">🛍️</div>
+    <div class="non-ecom-title">Not a shopping site</div>
+    <div class="non-ecom-sub">Navigate to any e-commerce website — Amazon, Flipkart, eBay, Myntra, or any online store — and GuardLens will automatically scan for dark patterns.</div>
+  </div>
+
+  <!-- MAIN DASHBOARD -->
+  <div id="dashboard">
+
+    <!-- Trust Score -->
+    <div class="score-card">
+      <div class="score-ring">
+        <svg viewBox="0 0 80 80">
+          <circle class="ring-bg" cx="40" cy="40" r="35"/>
+          <circle class="ring-fg" id="ringFg" cx="40" cy="40" r="35"/>
+        </svg>
+        <div class="ring-num">
+          <span class="ring-value" id="scoreVal">--</span>
+          <span class="ring-label">Trust</span>
+        </div>
+      </div>
+      <div class="score-info">
+        <div class="score-site" id="siteName">Loading…</div>
+        <div class="score-desc" id="scoreDesc">Calculating…</div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="section-label">Detected Patterns</div>
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-chip">
+        <span class="stat-chip-icon">⏰</span>
+        <div class="stat-chip-info">
+          <div class="stat-chip-value" id="urgencyCount">0</div>
+          <div class="stat-chip-label">Fake Urgency</div>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-icon">📦</span>
+        <div class="stat-chip-info">
+          <div class="stat-chip-value" id="scarcityCount">0</div>
+          <div class="stat-chip-label">False Scarcity</div>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-icon">🛒</span>
+        <div class="stat-chip-info">
+          <div class="stat-chip-value" id="sneakCount">0</div>
+          <div class="stat-chip-label">Sneak-in</div>
+        </div>
+      </div>
+      <div class="stat-chip">
+        <span class="stat-chip-icon">👥</span>
+        <div class="stat-chip-info">
+          <div class="stat-chip-value" id="socialCount">0</div>
+          <div class="stat-chip-label">Social Proof</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tags -->
+    <div class="tags" id="patternTags"></div>
+
+    <!-- Empty state (shown when patternCount=0) -->
+    <div class="empty-state" id="emptyState" style="display:none">
+      <div class="empty-icon">✅</div>
+      <div class="empty-title">No Dark Patterns Found</div>
+      <div class="empty-sub">This page looks clean! We found no urgency tricks, false scarcity, or deceptive social proof. Shop safely.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Comparison Module -->
+    <div id="comparison-module">
+      <div class="section-label">🔁 Market Comparison</div>
+      <div id="comparisonContent">
+        <div style="color:var(--text-muted);font-size:12px;padding:10px 0">
+          Open multiple e-commerce tabs to compare trust scores side by side.
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <button class="btn btn-primary" id="rescanBtn">🔄 Re-scan Page</button>
+      <button class="btn btn-ghost"   id="reportBtn">📝 Report Missing Pattern</button>
+    </div>
+
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">Powered by Chrome Gemini Nano AI · GuardLens 2.0</div>
+
+  <script src="sidepanel.js"></script>
+</body>
+</html>
